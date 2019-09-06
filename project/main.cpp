@@ -13,6 +13,7 @@ void listarDepartamento();
 void listarEmpleados();
 void jefeEmpleados(string);
 void depto(string);
+void addEmpleado();
 sqlite3 *conn;
 sqlite3_stmt *res;
 int error=0;
@@ -66,6 +67,7 @@ int main(int argc, char** argv) {
 							break;
 						case'2':
 							//add empleados
+							addEmpleado();
 							break;
 						case'3':
 							break;
@@ -85,6 +87,9 @@ int main(int argc, char** argv) {
 				jefeEmpleados(empno);
 				break;
 			case'5':
+				cout<<"\nempno: ";
+				cin>>empno;
+				
 				break;			
 			case'6':
 				cout<<"ndpto: ";
@@ -164,7 +169,42 @@ void addDepartamento(){
 	sqlite3_close(conn);
 }
 		
-		
+void addEmpleado(){
+	string query;
+	string s1;
+	string s2;
+	string s3;
+	string s4;
+	string s5;
+	string s6;
+	string s7;
+	string s8;//disculpa las variables no tenia tiempo
+	error=sqlite3_open("oracle-sample.db",&conn);
+	cin.ignore(100,'\n');
+	cout<<"\nemptno: ";
+	getline(cin,s1);
+	cout<<"\nename: ";
+	getline(cin,s2);
+	cout<<"\njob: ";
+	getline(cin,s3);
+	cout<<"\nmgr: ";
+	getline(cin,s4);
+	cout<<"\nhiredate: ";
+	getline(cin,s5);
+	cout<<"\nsalario: ";
+	getline(cin,s6);
+	cout<<"comm: ";
+	getline(cin,s7);
+	cout<<"dptno: ";
+	getline(cin,s8);
+	query="insert into emp values('"+s1+"','"+s2+"','"+s3+"','"+s4+"','"+s5+"','"+s6+"','"+s7+"','"+s8+"')";
+	error=sqlite3_exec(conn,query.c_str(),0,0,0);
+	if(error!=SQLITE_OK){
+		cout<<"\nsomething wrong /check query\n";
+	}
+	
+	sqlite3_close(conn);
+}		
 void modificar(){
 	error=sqlite3_open("base1.db",&conn);
 	error=sqlite3_exec(conn,
@@ -239,7 +279,7 @@ void depto(string ndepa){
     if(error!=SQLITE_OK){
 		cout<<"\nsomething wrong /check query\n";
 	}
-	cout<<"\n---nombre departamentos--"<<endl;
+	cout<<"\n---nombre departamento--"<<endl;
 	while(sqlite3_step(res) == SQLITE_ROW){
 		cout<<sqlite3_column_text(res,0)<<endl;
 	}
@@ -262,8 +302,12 @@ void depto(string ndepa){
 	while(sqlite3_step(res) == SQLITE_ROW){
 		sum+=atoi((char*)sqlite3_column_text(res,0));
 	}
-	cout<<"\nsum: "<<sum;
+	cout<<"\nsum: "<<sum<<endl;
 	sqlite3_close(conn);
 	
+}
+
+void actualizarSalario(string empno){
 	
 }
+
